@@ -2,19 +2,19 @@
  * #pragma directives...
 ************************************/
 #pragma config FEXTOSC = HS
-#pragma config RSTOSC = EXTOSC_4PLL 
-#pragma config WDTE = OFF        
+#pragma config RSTOSC = EXTOSC_4PLL     //
+#pragma config WDTE = OFF               //set watchdog
 
 /************************************
  * #include directives...
  ************************************/
-#include <xc.h>
+#include <xc.h>                     //getting function from library
 
 /************************************
  * #define directives...
  ************************************/
 #define _XTAL_FREQ 64000000 
-
+#define LED_LEFT LATDbits.LATD7         //define names so that its more readable
 /************************************
 / main function
  * ...
@@ -36,15 +36,14 @@ void main(void) {
     
     while (1) { //infinite while loop - repeat forever
         
+        while (PORTFbits.RF2 == 1 && PORTFbits.RF3 ==1); //if both buttons state do not change
         
-        while (PORTFbits.RF2 && PORTFbits.RF3); //empty while loop (wait for button press)
-        
-        if (!PORTFbits.RF2) {
+        if (!PORTFbits.RF2) {                   // if the button is pressed
             LATDbits.LATD7 = !LATDbits.LATD7; //toggle LED
         }
         
-        if (!PORTFbits.RF3 ) {
-            LATHbits.LATH3 = !LATHbits.LATH3;
+        if (!PORTFbits.RF3) {                   // if the button is pressed or not 1 anymore
+            LATHbits.LATH3 = !LATHbits.LATH3; //toggle RH3 LED
         }
         
         __delay_ms(200); // call built in delay function 
